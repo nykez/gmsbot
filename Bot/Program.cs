@@ -22,8 +22,9 @@ namespace Bot
         public Program()
         {
             _configuration = new ConfigurationBuilder()
-                .AddEnvironmentVariables(prefix: "DC_")
                 .AddJsonFile("appsettings.json", optional: true)
+                .AddEnvironmentVariables(prefix: "gms_")
+                .AddJsonFile("token.json", optional: true)
                 .Build();
 
             _services = new ServiceCollection()
@@ -50,8 +51,9 @@ namespace Bot
             await _services.GetRequiredService<InteractionHandler>()
                 .InitializeAsync();
 
+            var token = _configuration.GetValue<string>("token");
             // Bot token can be provided from the Configuration object we set up earlier
-            await client.LoginAsync(TokenType.Bot, _configuration["token"]);
+            await client.LoginAsync(TokenType.Bot, token);
             await client.StartAsync();
 
             // Never quit the program until manually forced to.
