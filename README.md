@@ -13,7 +13,7 @@ add something about managed hosting here
 
 add install/build instructions for self hosting here
 
-Create ``token.json`` with
+Create ``Bot/token.json`` with
 
 ```json
 {
