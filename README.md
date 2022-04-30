@@ -19,3 +19,4 @@ add something about managed hosting here
   "token": "your bot token here"
 }
 ```
+add more stuff here wip
