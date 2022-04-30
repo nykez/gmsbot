@@ -13,7 +13,9 @@ add something about managed hosting here
 
 add install/build instructions for self hosting here
 
-Create ``Bot/token.json`` with
+# Self Host
+
+1. Create ``Bot/token.json`` with
 
 ```json
 {
