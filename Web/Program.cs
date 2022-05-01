@@ -1,18 +1,21 @@
-using Microsoft.AspNetCore.Identity;
+using Bot.Data.Context;
+using Bot.Data.Models.ContextModels;
 using Microsoft.EntityFrameworkCore;
-using Web.Data;
+using Web.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(connectionString));
+   options.UseSqlServer(connectionString, b => b.MigrationsAssembly("Web")));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+builder.Services.AddDefaultIdentity<AppUser>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
+    
 builder.Services.AddControllersWithViews();
+builder.Services.AddGmodstoreServices(builder.Configuration["Gmodstore:AccessToken"]);
 
 var app = builder.Build();
 

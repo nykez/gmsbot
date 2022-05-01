@@ -1,8 +1,10 @@
-﻿using Bot.Services;
+﻿using Bot.Data.Context;
+using Bot.Services;
 using Discord;
 using Discord.Commands;
 using Discord.Interactions;
 using Discord.WebSocket;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -27,13 +29,21 @@ namespace Bot
                 .AddJsonFile("token.json", optional: true)
                 .Build();
 
+            var connectionString = _configuration.GetConnectionString("DefaultConnection");
+
             _services = new ServiceCollection()
                 .AddSingleton(_configuration)
                 .AddSingleton(_socketConfig)
                 .AddSingleton<DiscordSocketClient>()
+                .AddSingleton<CommandService>()
                 .AddSingleton(x => new InteractionService(x.GetRequiredService<DiscordSocketClient>()))
                 .AddSingleton<InteractionHandler>()
+                .AddSingleton<CommandHandlerService>()
+                .AddDbContext<ApplicationDbContext>(options =>
+                    options.UseSqlServer(connectionString, b => b.MigrationsAssembly("Web")))
                 .BuildServiceProvider();
+
+
         }
 
         static void Main(string[] args)
@@ -46,14 +56,16 @@ namespace Bot
             var client = _services.GetRequiredService<DiscordSocketClient>();
 
             client.Log += LogAsync;
+            _services.GetRequiredService<CommandService>().Log += LogAsync;
 
             // Here we can initialize the service that will register and execute our commands
             await _services.GetRequiredService<InteractionHandler>()
                 .InitializeAsync();
+            await _services.GetRequiredService<CommandHandlerService>()
+                .InitializeAsync();
 
-            var token = _configuration.GetValue<string>("token");
             // Bot token can be provided from the Configuration object we set up earlier
-            await client.LoginAsync(TokenType.Bot, token);
+            await client.LoginAsync(TokenType.Bot, _configuration.GetValue<string>("token"));
             await client.StartAsync();
 
             // Never quit the program until manually forced to.

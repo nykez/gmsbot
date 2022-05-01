@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bot", "Bot.csproj", "{1515D
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Web", "..\Web\Web.csproj", "{935411C6-2429-427B-A06F-6433F8A718B0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bot.Models", "..\Bot.Models\Bot.Models.csproj", "{5534F85A-226D-4148-AE5A-DB97151F1B31}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bot.Data", "..\Bot.Data\Bot.Data.csproj", "{AAE8009A-5D36-4F04-850C-C0E737F1D1E5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +23,10 @@ Global
 		{935411C6-2429-427B-A06F-6433F8A718B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{935411C6-2429-427B-A06F-6433F8A718B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{935411C6-2429-427B-A06F-6433F8A718B0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5534F85A-226D-4148-AE5A-DB97151F1B31}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5534F85A-226D-4148-AE5A-DB97151F1B31}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5534F85A-226D-4148-AE5A-DB97151F1B31}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5534F85A-226D-4148-AE5A-DB97151F1B31}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AAE8009A-5D36-4F04-850C-C0E737F1D1E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AAE8009A-5D36-4F04-850C-C0E737F1D1E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AAE8009A-5D36-4F04-850C-C0E737F1D1E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AAE8009A-5D36-4F04-850C-C0E737F1D1E5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
