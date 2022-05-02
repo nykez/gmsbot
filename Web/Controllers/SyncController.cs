@@ -49,6 +49,12 @@ namespace Web.Controllers
                     return BadRequest("Invalid id. Please try syncing again.");
 
                 var info = await _signInManager.GetExternalLoginInfoAsync();
+                if (info == null)
+                {
+                    _logger.LogError("Invalid login attempt. LoginInfo is null.");
+                    return BadRequest("[]");
+                }
+
                 var steamId = info.Principal.GetSteamId();
 
                 if (steamId == null)
@@ -56,6 +62,8 @@ namespace Web.Controllers
                     _logger.LogError("Could not get steamid from login.");
                     return BadRequest("Error logging in with steam. Cannot fetch id. Try again later.");
                 }
+
+                HttpContext.Session.Clear();
 
                 return Ok("You have been verified!");
             }
