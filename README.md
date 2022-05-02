@@ -12,7 +12,7 @@ add something about managed hosting here
 
 # Self Host Instructions
 
-1. Create ``Bot/token.json`` with
+1. Create ``Bot/token.json`` in Bot project dir with
 
 ```json
 {
