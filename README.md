@@ -18,5 +18,8 @@ add something about managed hosting here
 {
   "token": "your bot token here"
 }
+
+2. Create SteamApiKey in Web 
+  ex: ```dotnet user-secrets set "SteamApiKey" "steamapikey"`` or use appsettings "SteamApiKey"
 ```
 add more stuff here wip
