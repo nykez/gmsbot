@@ -10,7 +10,7 @@ namespace Bot.Data.Models
     {
         string? CreatedByUser { get; set; }
         DateTime CreatedAt { get; set; }
-        string UpdatedByUser { get; set; }
+        string? UpdatedByUser { get; set; }
         DateTime UpdatedAt { get; set; }
     }
 }

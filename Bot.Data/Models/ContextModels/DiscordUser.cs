@@ -7,11 +7,14 @@ using System.Threading.Tasks;
 
 namespace Bot.Data.Models.ContextModels
 {
-    public class DiscordUser
+    public class DiscordUser: IAuditEntity
     {
         [Key]
         public string? DiscordId { get; set; }
         public string? SteamId { get; set; }
-        public DateTime CreatedAt { get; set; } = DateTime.Now;
+        public string? CreatedByUser { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public string? UpdatedByUser { get; set; }
+        public DateTime UpdatedAt { get; set; }
     }
 }
