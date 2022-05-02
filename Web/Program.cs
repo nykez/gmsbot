@@ -1,6 +1,7 @@
 using Bot.Data.Context;
 using Bot.Data.Models.ContextModels;
 using Bot.Data.Processors;
+using Bot.Data.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using Web.Extensions;
@@ -32,7 +33,7 @@ builder.Services.AddDefaultIdentity<AppUser>()
 builder.Services.AddControllersWithViews();
 builder.Services.AddGmodstoreServices(builder.Configuration["Gmodstore:AccessToken"]);
 builder.Services.AddScoped<SyncRequestProcessor>();
-builder.Services.AddScoped<BotUserProcessor>();
+builder.Services.AddScoped<BotUserService>();
 
 var app = builder.Build();
 

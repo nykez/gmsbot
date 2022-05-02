@@ -27,7 +27,7 @@ namespace Web.Controllers
         }
         public IActionResult Index()
         {
-            return Ok("Index");
+            return Ok("[]");
         }
 
         [HttpGet("sync/{id}")]

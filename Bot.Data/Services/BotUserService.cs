@@ -30,11 +30,9 @@ namespace Bot.Data.Services
                 if (request == null)
                     throw new InvalidOperationException("No GUID present for this request user");
 
-
                 var isValidUser = await _userProcessor.GetUserById(request.DiscordId!);
                 if (isValidUser != null)
                     return isValidUser;
-
 
                 // create user
                 BotUser user = new();
