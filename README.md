@@ -21,6 +21,7 @@ add something about managed hosting here
 
 ```
 2. Switch to Web project dir and create SteamApiKey
-  ex: ```dotnet user-secrets set "SteamApiKey" "steamapikey"`` or use appsettings "SteamApiKey"```
+
+  ex: ```dotnet user-secrets set "SteamApiKey" "steamapikey"``` or any other configuration methods.
   
 add more stuff here wip
