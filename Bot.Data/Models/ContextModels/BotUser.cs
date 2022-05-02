@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Bot.Data.Models.ContextModels
 {
-    public class DiscordUser: IAuditEntity
+    public class BotUser: IAuditEntity
     {
         [Key]
         public string? DiscordId { get; set; }

@@ -17,6 +17,6 @@ namespace Bot.Data.Context
         }
 
         public DbSet<SyncRequest> SyncRequests => Set<SyncRequest>(); 
-        public DbSet<DiscordUser> DiscordUsers => Set<DiscordUser>();
+        public DbSet<BotUser> BotUsers => Set<BotUser>();
     }
 }

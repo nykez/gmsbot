@@ -9,35 +9,26 @@ using System.Threading.Tasks;
 
 namespace Bot.Data.Processors
 {
-    public class DiscordUserProcessor
+    public class BotUserProcessor
     {
         private readonly ApplicationDbContext _context;
         private readonly SyncRequestProcessor _syncRequestProcessor;
 
-        public DiscordUserProcessor(ApplicationDbContext context, SyncRequestProcessor syncRequestProcessor)
+        public BotUserProcessor(ApplicationDbContext context, SyncRequestProcessor syncRequestProcessor)
         {
             _context = context;
             _syncRequestProcessor = syncRequestProcessor;
         }
 
-        public async Task<DiscordUser> CreateOrUpdateUser(Guid syncId, string discordId, string steamId)
+        public async Task CreateUser(BotUser user)
         {
-            var user = await _context.DiscordUsers.Where(u => u.DiscordId == discordId).FirstOrDefaultAsync();
+            _context.BotUsers.Add(user);
+            await _context.SaveChangesAsync();
+        }
 
-            if (user == null)
-            {
-                user = new DiscordUser();
-                user.DiscordId = discordId;
-                user.SteamId = steamId;
-
-                _context.DiscordUsers.Add(user);
-                await _context.SaveChangesAsync();
-
-            }
-
-            await _syncRequestProcessor.DeleteRequestById(syncId);
-
-            return user;
+        public async Task<BotUser?> GetUserById(string discordId)
+        {
+            return await _context.BotUsers.Where(_u => _u.DiscordId == discordId).FirstOrDefaultAsync();
         }
     }
 }

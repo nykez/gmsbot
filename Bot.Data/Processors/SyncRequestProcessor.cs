@@ -31,6 +31,7 @@ namespace Bot.Data.Processors
             return await _context.SyncRequests.AnyAsync(_ => _.DiscordId == discordId);
         }
 
+
         public async Task<SyncRequest> GetOrCreateRequest(string discordId)
         {
             var request = await _context.SyncRequests.FirstOrDefaultAsync(x => x.DiscordId == discordId);
@@ -82,6 +83,11 @@ namespace Bot.Data.Processors
 
             _context.SyncRequests.Remove(request!);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<SyncRequest?> GetRequestById(Guid id)
+        {
+            return await _context.SyncRequests.Where(_ => _.Id == id).FirstOrDefaultAsync();
         }
     }
 }

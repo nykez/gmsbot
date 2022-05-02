@@ -1,5 +1,6 @@
 ﻿using Bot.Data.Models.ContextModels;
 using Bot.Data.Processors;
+using Bot.Data.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -14,12 +15,15 @@ namespace Web.Controllers
         private readonly ILogger<SyncController> _logger;
         private readonly SyncRequestProcessor _processor;
         private readonly SignInManager<AppUser> _signInManager;
+        private readonly BotUserService _userService;
 
-        public SyncController(ILogger<SyncController> logger, SyncRequestProcessor processor, SignInManager<AppUser> signInManager)
+        public SyncController(ILogger<SyncController> logger, SyncRequestProcessor processor, SignInManager<AppUser> signInManager,
+            BotUserService userService)
         {
             _logger = logger;
             _processor = processor;
             _signInManager = signInManager;
+            _userService = userService;
         }
         public IActionResult Index()
         {
@@ -46,31 +50,25 @@ namespace Web.Controllers
             try
             {
                 if (id == Guid.Empty)
-                    return BadRequest("Invalid id. Please try syncing again.");
+                    return BadRequest("Invalid id. Please try syncing again with the bot.");
 
                 var info = await _signInManager.GetExternalLoginInfoAsync();
                 if (info == null)
-                {
-                    _logger.LogError("Invalid login attempt. LoginInfo is null.");
-                    return BadRequest("[]");
-                }
+                    throw new Exception("Invalid login attempt. LoginInfo is null.");
+
 
                 var steamId = info.Principal.GetSteamId();
-
                 if (steamId == null)
-                {
-                    _logger.LogError("Could not get steamid from login.");
-                    return BadRequest("Error logging in with steam. Cannot fetch id. Try again later.");
-                }
+                    throw new Exception("Could not get steamid from login.");
 
-                HttpContext.Session.Clear();
+                await _userService.CreateOrUpdateUserAsync(id, steamId);
 
                 return Ok("You have been verified!");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                _logger.LogError("Error logging in and syncing with steam!");
-                return BadRequest("[]");
+                _logger.LogError("Error logging in and syncing with steam!", ex);
+                return BadRequest("['Error']");
             }
         }
     }

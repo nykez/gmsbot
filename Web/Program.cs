@@ -32,6 +32,7 @@ builder.Services.AddDefaultIdentity<AppUser>()
 builder.Services.AddControllersWithViews();
 builder.Services.AddGmodstoreServices(builder.Configuration["Gmodstore:AccessToken"]);
 builder.Services.AddScoped<SyncRequestProcessor>();
+builder.Services.AddScoped<BotUserProcessor>();
 
 var app = builder.Build();
 
