@@ -38,6 +38,7 @@ builder.Services.AddScoped<SyncRequestProcessor>();
 builder.Services.AddScoped<BotUserProcessor>();
 builder.Services.AddScoped<BotUserService>();
 builder.Services.AddSingleton<IConfigureOptions<AppConfiguration>,AppConfigOptions>();
+builder.Services.AddScoped<AppConfigService>();
 
 var app = builder.Build();
 

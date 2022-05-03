@@ -1,4 +1,5 @@
-﻿using Bot.Data.Models;
+﻿using Bot.Data;
+using Bot.Data.Models;
 using Bot.Data.Models.ContextModels;
 using Bot.Data.Processors;
 using Bot.Data.Services;
@@ -18,10 +19,10 @@ namespace Web.Controllers
         private readonly SyncRequestProcessor _processor;
         private readonly SignInManager<AppUser> _signInManager;
         private readonly BotUserService _userService;
-        private readonly IOptions<AppConfiguration> _configuration;
+        private readonly AppConfigService _configuration;
 
         public SyncController(ILogger<SyncController> logger, SyncRequestProcessor processor, SignInManager<AppUser> signInManager,
-            BotUserService userService, IOptions<AppConfiguration> configuration)
+            BotUserService userService, AppConfigService configuration)
         {
             _logger = logger;
             _processor = processor;
@@ -29,10 +30,9 @@ namespace Web.Controllers
             _userService = userService;
             _configuration = configuration;
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var configOptions = JsonSerializer.Serialize(_configuration?.Value?.Config?.ToList());
-            return Ok("[]" + configOptions);
+            return Ok("[]");
         }
         
         [HttpGet("sync/user/{id}")]
