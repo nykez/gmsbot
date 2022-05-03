@@ -12,6 +12,8 @@ I made this because I was curious and wanted to learn more about the slashcomman
 
 The web interface providers a simple UI to add roles based on the user's purchase scripts. Its also recommended to point gmodstore webhooks (purchase, revoke, unrevoked) to your app url. Example: ``myapp.com/api/webhooks/<purchase,revoked,unrevoked>``. This will allow the bot to update the user's roles (if exists) in real time.
 
+Best to run on a single container with reverse nginx proxy
+
 # Self Host Instructions
 
 1. Create ``Bot/token.json`` in Bot project dir with
