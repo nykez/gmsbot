@@ -10,10 +10,15 @@ namespace Bot.Data.Context
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.Entity<SyncRequest>().HasData(
-                new SyncRequest { Id = Guid.NewGuid() });
-
             builder.Entity<ScriptUserRole>().HasOne(t => t.User).WithMany(t => t.Roles);
+
+            // seed some app config options
+            builder.Entity<AppConfig>().HasData(new AppConfig()
+            { Key = AppConfigConstants.SteamApiKey, Value = "" }, new AppConfig()
+            { Key = AppConfigConstants.BotToken, Value = ""}, new AppConfig()
+            { Key = AppConfigConstants.GmsToken, Value = ""});
+
+
 
             base.OnModelCreating(builder);
         }
