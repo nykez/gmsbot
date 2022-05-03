@@ -1,10 +1,12 @@
-﻿using Bot.Data.Models.ContextModels;
+﻿using Bot.Data.Models;
+using Bot.Data.Models.ContextModels;
 using Bot.Data.Processors;
 using Bot.Data.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using System.Text.Json;
 using Web.Extensions;
 
@@ -16,18 +18,21 @@ namespace Web.Controllers
         private readonly SyncRequestProcessor _processor;
         private readonly SignInManager<AppUser> _signInManager;
         private readonly BotUserService _userService;
+        private readonly IOptions<AppConfiguration> _configuration;
 
         public SyncController(ILogger<SyncController> logger, SyncRequestProcessor processor, SignInManager<AppUser> signInManager,
-            BotUserService userService)
+            BotUserService userService, IOptions<AppConfiguration> configuration)
         {
             _logger = logger;
             _processor = processor;
             _signInManager = signInManager;
             _userService = userService;
+            _configuration = configuration;
         }
         public IActionResult Index()
         {
-            return Ok("[]");
+            var configOptions = JsonSerializer.Serialize(_configuration?.Value?.Config?.ToList());
+            return Ok("[]" + configOptions);
         }
         
         [HttpGet("sync/user/{id}")]

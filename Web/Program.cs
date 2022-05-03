@@ -1,9 +1,11 @@
+using Bot.Data;
 using Bot.Data.Context;
+using Bot.Data.Models;
 using Bot.Data.Models.ContextModels;
 using Bot.Data.Processors;
 using Bot.Data.Services;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Web.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -35,6 +37,7 @@ builder.Services.AddGmodstoreServices(builder.Configuration["Gmodstore:AccessTok
 builder.Services.AddScoped<SyncRequestProcessor>();
 builder.Services.AddScoped<BotUserProcessor>();
 builder.Services.AddScoped<BotUserService>();
+builder.Services.AddSingleton<IConfigureOptions<AppConfiguration>,AppConfigOptions>();
 
 var app = builder.Build();
 

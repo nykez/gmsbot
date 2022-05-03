@@ -13,12 +13,6 @@ namespace Bot.Data.Context
             builder.Entity<SyncRequest>().HasData(
                 new SyncRequest { Id = Guid.NewGuid() });
 
-            //builder.Entity<ScriptUserRole>().HasKey(t => new
-            //{
-            //    t.UserId,
-            //    t.RoleId
-            //});
-
             builder.Entity<ScriptUserRole>().HasOne(t => t.User).WithMany(t => t.Roles);
 
             base.OnModelCreating(builder);
@@ -28,5 +22,6 @@ namespace Bot.Data.Context
         public DbSet<BotUser> BotUsers => Set<BotUser>();
         public DbSet<ScriptRole> ScriptRoles => Set<ScriptRole>();
         public DbSet<ScriptUserRole> ScriptUserRoles => Set<ScriptUserRole>();
+        public DbSet<AppConfig> AppConfig => Set<AppConfig>();
     }
 }
