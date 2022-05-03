@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Web.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220501032114_Seed_01")]
-    partial class Seed_01
+    [Migration("20220503040208_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -92,6 +92,73 @@ namespace Web.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("Bot.Data.Models.ContextModels.BotUser", b =>
+                {
+                    b.Property<string>("DiscordId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedByUser")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SteamId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdatedByUser")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("DiscordId");
+
+                    b.ToTable("BotUsers");
+                });
+
+            modelBuilder.Entity("Bot.Data.Models.ContextModels.ScriptRole", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("DiscordRoleId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ScriptId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ScriptRoles");
+                });
+
+            modelBuilder.Entity("Bot.Data.Models.ContextModels.ScriptUserRole", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int?>("RoleId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserDiscordId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoleId");
+
+                    b.HasIndex("UserDiscordId");
+
+                    b.ToTable("ScriptUserRoles");
+                });
+
             modelBuilder.Entity("Bot.Data.Models.ContextModels.SyncRequest", b =>
                 {
                     b.Property<Guid>("Id")
@@ -108,7 +175,7 @@ namespace Web.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("945afdf4-59cf-4b27-a92f-3c6cf7df2783")
+                            Id = new Guid("87952c0d-f123-414a-a244-d3df9723b6cf")
                         });
                 });
 
@@ -249,6 +316,21 @@ namespace Web.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Bot.Data.Models.ContextModels.ScriptUserRole", b =>
+                {
+                    b.HasOne("Bot.Data.Models.ContextModels.ScriptRole", "Role")
+                        .WithMany()
+                        .HasForeignKey("RoleId");
+
+                    b.HasOne("Bot.Data.Models.ContextModels.BotUser", "User")
+                        .WithMany("Roles")
+                        .HasForeignKey("UserDiscordId");
+
+                    b.Navigation("Role");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -298,6 +380,11 @@ namespace Web.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Bot.Data.Models.ContextModels.BotUser", b =>
+                {
+                    b.Navigation("Roles");
                 });
 #pragma warning restore 612, 618
         }

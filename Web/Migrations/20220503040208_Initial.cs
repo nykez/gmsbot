@@ -50,6 +50,36 @@ namespace Web.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "BotUsers",
+                columns: table => new
+                {
+                    DiscordId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    SteamId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedByUser = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedByUser = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BotUsers", x => x.DiscordId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ScriptRoles",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ScriptId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DiscordRoleId = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ScriptRoles", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "SyncRequests",
                 columns: table => new
                 {
@@ -167,6 +197,35 @@ namespace Web.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "ScriptUserRoles",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserDiscordId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    RoleId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ScriptUserRoles", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ScriptUserRoles_BotUsers_UserDiscordId",
+                        column: x => x.UserDiscordId,
+                        principalTable: "BotUsers",
+                        principalColumn: "DiscordId");
+                    table.ForeignKey(
+                        name: "FK_ScriptUserRoles_ScriptRoles_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "ScriptRoles",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.InsertData(
+                table: "SyncRequests",
+                columns: new[] { "Id", "DiscordId" },
+                values: new object[] { new Guid("87952c0d-f123-414a-a244-d3df9723b6cf"), null });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -205,6 +264,16 @@ namespace Web.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ScriptUserRoles_RoleId",
+                table: "ScriptUserRoles",
+                column: "RoleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ScriptUserRoles_UserDiscordId",
+                table: "ScriptUserRoles",
+                column: "UserDiscordId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -225,6 +294,9 @@ namespace Web.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "ScriptUserRoles");
+
+            migrationBuilder.DropTable(
                 name: "SyncRequests");
 
             migrationBuilder.DropTable(
@@ -232,6 +304,12 @@ namespace Web.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "BotUsers");
+
+            migrationBuilder.DropTable(
+                name: "ScriptRoles");
         }
     }
 }
