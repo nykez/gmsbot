@@ -10,7 +10,9 @@ A discord and web application made for content creators of gmodstore.
 # Description 
 I made this because I was curious and wanted to learn more about the slashcommands added in discord.NET. This setup really only works for a single guild per instance (as of 5/2022). 
 
-The web interface providers a simple UI to add roles based on the user's purchase scripts. Its also recommended to point gmodstore webhooks (purchase, revoke, unrevoked) to your app url. Example: ``myapp.com/api/webhooks/<purchase,revoked,unrevoked>``. This will allow the bot to update the user's roles (if exists) in real time.
+The web interface providers a simple UI to add roles based on the user's purchase scripts. It is recommended to route gmodstore webhooks (purchase, revoke, unrevoked) to your app url. Example: ``myapp.com/api/webhooks/<purchase,revoked,unrevoked>``. This will allow the bot to update the user's roles (if exists) in real time based on the action taken.
+
+Best to run on a single container with reverse nginx proxy
 
 # Self Host Instructions
 
