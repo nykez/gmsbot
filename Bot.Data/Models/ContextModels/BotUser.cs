@@ -16,5 +16,6 @@ namespace Bot.Data.Models.ContextModels
         public DateTime CreatedAt { get; set; }
         public string? UpdatedByUser { get; set; }
         public DateTime UpdatedAt { get; set; }
+        public virtual List<ScriptUserRole>? Roles { get; set; }
     }
 }

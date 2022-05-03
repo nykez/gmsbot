@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace Bot.Services
 {
-    public class UserManagerService
+    public class DiscordManagerService
     {
         private readonly DiscordSocketClient _client;
 
-        public UserManagerService(DiscordSocketClient client)
+        public DiscordManagerService(DiscordSocketClient client)
         {
             _client = client;
         }

@@ -28,7 +28,9 @@ namespace Bot.Data.Processors
 
         public async Task<BotUser?> GetUserById(string discordId)
         {
-            return await _context.BotUsers.Where(_u => _u.DiscordId == discordId).FirstOrDefaultAsync();
+            return await _context.BotUsers
+                .Include(u => u.Roles).ThenInclude(u => u.Role)
+                .FirstOrDefaultAsync(u => u.DiscordId == discordId);
         }
     }
 }

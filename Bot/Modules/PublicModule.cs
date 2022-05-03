@@ -1,10 +1,13 @@
 ﻿using Bot.Data.Context;
 using Bot.Data.Models.ContextModels;
+using Bot.Data.Services;
+using Bot.Services;
 using Discord.Commands;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Bot.Modules
@@ -12,20 +15,19 @@ namespace Bot.Modules
     // Modules must be public and inherit from an IModuleBase
     public class PublicModule : ModuleBase<SocketCommandContext>
     {
-        private readonly ApplicationDbContext _context;
+        private readonly BotUserService _manager;
 
-        public PublicModule(ApplicationDbContext context)
+        public PublicModule(BotUserService manager)
         {
-           _context = context;
+            _manager = manager;
         }
 
         [Command("ping")]
         [Alias("pong", "hello")]
         public async Task PingAsync()
         {
-            await _context.SyncRequests.AddAsync(new SyncRequest() { DiscordId = Context.User.Id.ToString()});
-            await _context.SaveChangesAsync();
-            await ReplyAsync("pong!");
+            var user = await _manager.GetAsync(Context.User.Id.ToString());
+            await ReplyAsync("pong!" + JsonSerializer.Serialize(user));
         }
 
     }

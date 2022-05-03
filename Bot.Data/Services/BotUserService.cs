@@ -22,6 +22,11 @@ namespace Bot.Data.Services
             _syncProcessor = syncProcessor;
         }
 
+        public async Task<BotUser> GetAsync(string? id)
+        {
+            return await _userProcessor.GetUserById(id);
+        }
+
         public async Task<BotUser> CreateOrUpdateUserAsync(Guid id, string steamId)
         {
             try
@@ -52,6 +57,11 @@ namespace Bot.Data.Services
                 _logger.LogError($"Error attempting to create bot user: {id}:{steamId}", ex);
                 throw;
             }
+        }
+
+        private async Task UpdateUserRoles(BotUser user)
+        {
+
         }
     }
 }

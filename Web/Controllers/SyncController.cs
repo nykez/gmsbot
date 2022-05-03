@@ -29,6 +29,12 @@ namespace Web.Controllers
         {
             return Ok("[]");
         }
+        
+        [HttpGet("sync/user/{id}")]
+        public async Task<BotUser> Get(string id)
+        {
+            return await _userService.GetAsync(id);
+        }
 
         [HttpGet("sync/{id}")]
         public async Task<IActionResult> Sync(Guid id)

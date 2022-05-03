@@ -1,4 +1,6 @@
 ﻿using Bot.Data.Context;
+using Bot.Data.Processors;
+using Bot.Data.Services;
 using Bot.Services;
 using Discord;
 using Discord.Commands;
@@ -7,6 +9,9 @@ using Discord.WebSocket;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Serilog;
+using Serilog.Events;
 
 namespace Bot
 {
@@ -31,7 +36,9 @@ namespace Bot
 
             var connectionString = _configuration.GetConnectionString("DefaultConnection");
 
+
             _services = new ServiceCollection()
+                .AddLogging()
                 .AddSingleton(_configuration)
                 .AddSingleton(_socketConfig)
                 .AddSingleton<DiscordSocketClient>()
@@ -41,9 +48,10 @@ namespace Bot
                 .AddSingleton<CommandHandlerService>()
                 .AddDbContext<ApplicationDbContext>(options =>
                     options.UseSqlServer(connectionString, b => b.MigrationsAssembly("Web")))
+                .AddScoped<SyncRequestProcessor>()
+                .AddScoped<BotUserProcessor>()
+                .AddScoped<BotUserService>()
                 .BuildServiceProvider();
-
-
         }
 
         static void Main(string[] args)
@@ -53,6 +61,11 @@ namespace Bot
 
         public async Task RunAsync()
         {
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Verbose()
+                .Enrich.FromLogContext()
+                .CreateLogger();
+
             var client = _services.GetRequiredService<DiscordSocketClient>();
 
             client.Log += LogAsync;
@@ -72,8 +85,23 @@ namespace Bot
             await Task.Delay(Timeout.Infinite);
         }
 
-        private async Task LogAsync(LogMessage message)
-            => Console.WriteLine(message.ToString());
+        private static Task LogAsync(LogMessage message)
+        {
+            var severity = message.Severity switch
+            {
+                LogSeverity.Critical => LogEventLevel.Fatal,
+                LogSeverity.Error => LogEventLevel.Error,
+                LogSeverity.Warning => LogEventLevel.Warning,
+                LogSeverity.Info => LogEventLevel.Information,
+                LogSeverity.Verbose => LogEventLevel.Verbose,
+                LogSeverity.Debug => LogEventLevel.Debug,
+                _ => LogEventLevel.Information
+            };
+
+            Log.Write(severity, message.Exception, "[{Source}] {Message}", message.Source, message.Message);
+
+            return Task.CompletedTask;
+        }
 
         public static bool IsDebug()
         {
