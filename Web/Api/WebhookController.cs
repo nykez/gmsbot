@@ -12,7 +12,7 @@ namespace Web.Controllers
         // GET: api/<WebhookController>
         [HttpPost("revoked")]
         [RestrictDomain("gmodstore.com", "localhost")]
-        public async Task<IActionResult> Revoked([FromBody] AddonPurchase addon)
+        public async Task<IActionResult> Revoked([FromBody] ProductPurchase addon)
         {
             if (!addon.Revoked)
                 return BadRequest("Calling revoked API while addon is not revoked.");
@@ -22,14 +22,14 @@ namespace Web.Controllers
 
         [HttpPost("purchase")]
         [RestrictDomain("gmodstore.com", "localhost")]
-        public async Task<IActionResult> Purchase([FromBody] AddonPurchase addon)
+        public async Task<IActionResult> Purchase([FromBody] ProductPurchase addon)
         {
             return Ok("ok");
         }
 
         [HttpPost("unrevoked")]
         [RestrictDomain("gmodstore.com", "localhost")]
-        public async Task<IActionResult> Unrevoked([FromBody] AddonPurchase addon)
+        public async Task<IActionResult> Unrevoked([FromBody] ProductPurchase addon)
         {
             if (addon.Revoked)
                 return BadRequest("Calling unrevoked API while addon is revoked.");

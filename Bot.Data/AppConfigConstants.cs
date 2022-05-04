@@ -15,5 +15,9 @@ namespace Bot.Data
         /// gmodstore access token in db
         /// </summary>
         public const string GmsToken = "gms_token";
+        /// <summary>
+        /// app url for main website
+        /// </summary>
+        public const string AppUrl = "app_url";
     }
 }

@@ -23,6 +23,11 @@ namespace Bot.Data.Services
             return value!;
         }
 
+        public AppConfig GetConfigItemSingle(string? key)
+        {
+            return _snapshot!.Value!.Config!.FirstOrDefault(u => u.Key == key)!;
+        }
+
         public AppConfiguration GetConfig()
         {
             return _snapshot.Value;

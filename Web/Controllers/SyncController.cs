@@ -3,6 +3,7 @@ using Bot.Data.Models;
 using Bot.Data.Models.ContextModels;
 using Bot.Data.Processors;
 using Bot.Data.Services;
+using Bot.Http;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -19,17 +20,18 @@ namespace Web.Controllers
         private readonly SyncRequestProcessor _processor;
         private readonly SignInManager<AppUser> _signInManager;
         private readonly BotUserService _userService;
-        private readonly AppConfigService _configuration;
+        private readonly GmodstoreService _productsPurchase;
 
         public SyncController(ILogger<SyncController> logger, SyncRequestProcessor processor, SignInManager<AppUser> signInManager,
-            BotUserService userService, AppConfigService configuration)
+            BotUserService userService, GmodstoreService productsPurchase)
         {
             _logger = logger;
             _processor = processor;
             _signInManager = signInManager;
             _userService = userService;
-            _configuration = configuration;
+            _productsPurchase = productsPurchase;
         }
+
         public async Task<IActionResult> Index()
         {
             return Ok("[]");

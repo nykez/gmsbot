@@ -9,36 +9,26 @@ using Microsoft.Extensions.Options;
 using Web.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
-
 // Add services to the container.
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-
-builder.Services.AddAuthentication(options => {})
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+   options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly("Web")));
+builder.Services.AddSingleton<IConfigureOptions<AppConfiguration>, AppConfigOptions>();
+builder.Services.AddAuthentication(options => { })
     .AddSteam(o =>
     {
-       o.Events = new AspNet.Security.OpenId.OpenIdAuthenticationEvents
-       {
-           OnRedirectToIdentityProvider = (context) =>
-           {
-               var guidId = context.Request.Query.FirstOrDefault(x => x.Key == "guidId");
-               context.ProtocolMessage.SetParameter("guidId", guidId.Value);
-               return Task.CompletedTask;
-           }
-       };
         o.ApplicationKey = builder.Configuration["SteamApiKey"];
     });
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-   options.UseSqlServer(connectionString, b => b.MigrationsAssembly("Web")));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddDefaultIdentity<AppUser>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
+builder.Services.AddHttpClient();
 builder.Services.AddControllersWithViews();
-builder.Services.AddGmodstoreServices(builder.Configuration["Gmodstore:AccessToken"]);
-builder.Services.AddScoped<SyncRequestProcessor>();
-builder.Services.AddScoped<BotUserProcessor>();
-builder.Services.AddScoped<BotUserService>();
-builder.Services.AddSingleton<IConfigureOptions<AppConfiguration>,AppConfigOptions>();
-builder.Services.AddScoped<AppConfigService>();
+builder.Services.AddTransient<SyncRequestProcessor>();
+builder.Services.AddTransient<BotUserProcessor>();
+builder.Services.AddTransient<BotUserService>();
+builder.Services.AddTransient<AppConfigService>();
+builder.Services.AddGmodstoreServices();
+
 
 var app = builder.Build();
 

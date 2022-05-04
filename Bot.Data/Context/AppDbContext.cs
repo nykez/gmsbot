@@ -15,10 +15,9 @@ namespace Bot.Data.Context
             // seed some app config options
             builder.Entity<AppConfig>().HasData(new AppConfig()
             { Key = AppConfigConstants.SteamApiKey, Value = "" }, new AppConfig()
-            { Key = AppConfigConstants.BotToken, Value = ""}, new AppConfig()
-            { Key = AppConfigConstants.GmsToken, Value = ""});
-
-
+            { Key = AppConfigConstants.BotToken, Value = "" }, new AppConfig()
+            { Key = AppConfigConstants.GmsToken, Value = "" }, new AppConfig()
+            { Key = AppConfigConstants.AppUrl, Value = "" });
 
             base.OnModelCreating(builder);
         }

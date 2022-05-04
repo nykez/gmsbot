@@ -24,7 +24,7 @@ namespace Bot.Data.Services
 
         public async Task<BotUser> GetAsync(string? id)
         {
-            return await _userProcessor.GetUserById(id);
+            return await _userProcessor!.GetUserById(id)!;
         }
 
         public async Task<BotUser> CreateOrUpdateUserAsync(Guid id, string steamId)

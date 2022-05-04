@@ -1,4 +1,6 @@
-﻿using Bot.Data.Context;
+﻿using Bot.Data;
+using Bot.Data.Context;
+using Bot.Data.Models;
 using Bot.Data.Processors;
 using Bot.Data.Services;
 using Bot.Services;
@@ -10,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Serilog;
 using Serilog.Events;
 
@@ -38,7 +41,11 @@ namespace Bot
 
 
             _services = new ServiceCollection()
-                .AddLogging()
+                .AddLogging( options =>
+                {
+                    options.ClearProviders();
+                    options.AddConsole();
+                })
                 .AddSingleton(_configuration)
                 .AddSingleton(_socketConfig)
                 .AddSingleton<DiscordSocketClient>()
@@ -48,9 +55,11 @@ namespace Bot
                 .AddSingleton<CommandHandlerService>()
                 .AddDbContext<ApplicationDbContext>(options =>
                     options.UseSqlServer(connectionString, b => b.MigrationsAssembly("Web")))
+                .AddSingleton<IConfigureOptions<AppConfiguration>, AppConfigOptions>()
                 .AddScoped<SyncRequestProcessor>()
                 .AddScoped<BotUserProcessor>()
                 .AddScoped<BotUserService>()
+                .AddScoped<AppConfigService>()
                 .BuildServiceProvider();
         }
 
@@ -62,11 +71,13 @@ namespace Bot
         public async Task RunAsync()
         {
             Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Verbose()
-                .Enrich.FromLogContext()
-                .CreateLogger();
+               .WriteTo.File("logs/bot.log", rollingInterval: RollingInterval.Day)
+               .CreateLogger();
+
 
             var client = _services.GetRequiredService<DiscordSocketClient>();
+            var appConfig = _services.GetRequiredService<AppConfigService>();
+            var token = await appConfig.GetConfigItem("bot_token");
 
             client.Log += LogAsync;
             _services.GetRequiredService<CommandService>().Log += LogAsync;
@@ -78,7 +89,7 @@ namespace Bot
                 .InitializeAsync();
 
             // Bot token can be provided from the Configuration object we set up earlier
-            await client.LoginAsync(TokenType.Bot, _configuration.GetValue<string>("token"));
+            await client.LoginAsync(TokenType.Bot, token.Value);
             await client.StartAsync();
 
             // Never quit the program until manually forced to.
@@ -99,6 +110,7 @@ namespace Bot
             };
 
             Log.Write(severity, message.Exception, "[{Source}] {Message}", message.Source, message.Message);
+            Console.WriteLine(message.ToString());
 
             return Task.CompletedTask;
         }
