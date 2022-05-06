@@ -28,6 +28,7 @@ builder.Services.AddTransient<BotUserProcessor>();
 builder.Services.AddTransient<BotUserService>();
 builder.Services.AddTransient<AppConfigService>();
 builder.Services.AddGmodstoreServices();
+builder.Host.AddDiscordBot(builder.Services);
 
 
 var app = builder.Build();

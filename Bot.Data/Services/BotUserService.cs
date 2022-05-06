@@ -49,6 +49,7 @@ namespace Bot.Data.Services
                 user.CreatedByUser = "root";
 
                 await _userProcessor.CreateUser(user);
+                await UpdateUserRoles(user);
 
                 return user;
             }
