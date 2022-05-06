@@ -1,7 +1,6 @@
 using Bot.Data;
 using Bot.Data.Context;
 using Bot.Data.Services;
-using Bot.Services;
 using Bot.Worker;
 using Bot.Worker.Handlers;
 using Discord;
@@ -54,7 +53,6 @@ try
         services.AddScoped<AppConfigService>();
         services.AddHostedService<CommandHandler>();
         services.AddHostedService<InteractionHandler>();
-        services.AddHostedService<UserBrokerService>();
         services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlServer(context.Configuration.GetConnectionString("Default"), b => b.MigrationsAssembly("Web")));
     }).UseConsoleLifetime();

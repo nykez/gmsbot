@@ -22,9 +22,10 @@ namespace Bot.Data.Services
             _syncProcessor = syncProcessor;
         }
 
-        public async Task<BotUser> GetAsync(string? id)
+        public async Task<BotUser> GetAsync(string id)
         {
-            return await _userProcessor!.GetUserById(id)!;
+            var user = await _userProcessor.GetUserById(id);
+            return user!;
         }
 
         public async Task<BotUser> CreateOrUpdateUserAsync(Guid id, string steamId)
@@ -62,7 +63,9 @@ namespace Bot.Data.Services
 
         private async Task UpdateUserRoles(BotUser user)
         {
+            // fetch what addons the user has
 
+            // apply roles based on what addons the user has
         }
     }
 }

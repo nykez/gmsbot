@@ -4,6 +4,8 @@ using Bot.Data.Models.ContextModels;
 using Bot.Data.Processors;
 using Bot.Data.Services;
 using Bot.Http;
+using Discord;
+using Discord.WebSocket;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
