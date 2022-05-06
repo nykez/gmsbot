@@ -3,6 +3,7 @@ using Bot.Data.Context;
 using Bot.Data.Models;
 using Bot.Data.Models.ContextModels;
 using Bot.Data.Processors;
+using Bot.Data.Repos;
 using Bot.Data.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -23,10 +24,13 @@ builder.Services.AddDefaultIdentity<AppUser>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddHttpClient();
 builder.Services.AddControllersWithViews();
-builder.Services.AddTransient<SyncRequestProcessor>();
-builder.Services.AddTransient<BotUserProcessor>();
-builder.Services.AddTransient<BotUserService>();
-builder.Services.AddTransient<AppConfigService>();
+builder.Services.AddScoped<SyncRequestProcessor>();
+builder.Services.AddScoped<BotUserProcessor>();
+builder.Services.AddScoped<BotUserService>();
+builder.Services.AddScoped<AppConfigService>();
+builder.Services.AddScoped<RolesRepo>();
+builder.Services.AddScoped<UserRolesRepo>();
+builder.Services.AddScoped<DiscordUserManager>();
 builder.Services.AddGmodstoreServices();
 builder.Host.AddDiscordBot(builder.Services);
 

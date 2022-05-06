@@ -26,13 +26,13 @@ namespace Bot.Data.Processors
             return await _context.SyncRequests.AnyAsync(x => x.Id == id);
         }
 
-        public async Task<bool> UserHasRequest(string discordId)
+        public async Task<bool> UserHasRequest(ulong discordId)
         {
             return await _context.SyncRequests.AnyAsync(_ => _.DiscordId == discordId);
         }
 
 
-        public async Task<SyncRequest> GetOrCreateRequest(string discordId)
+        public async Task<SyncRequest> GetOrCreateRequest(ulong discordId)
         {
             var request = await _context.SyncRequests.FirstOrDefaultAsync(x => x.DiscordId == discordId);
 
@@ -54,7 +54,7 @@ namespace Bot.Data.Processors
             }
         }
 
-        public async Task<SyncRequest> CreateRequest(string discordId)
+        public async Task<SyncRequest> CreateRequest(ulong discordId)
         {
             var request = new SyncRequest() { DiscordId = discordId };
 
@@ -64,7 +64,7 @@ namespace Bot.Data.Processors
             return request;
         }
 
-        public async Task DeleteAllRequests(string discordId)
+        public async Task DeleteAllRequests(ulong discordId)
         {
             var records = await _context.SyncRequests.Where(x => x.DiscordId == discordId).ToListAsync();
 

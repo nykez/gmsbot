@@ -1,12 +1,7 @@
 ﻿using Discord;
 using Discord.WebSocket;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Bot.Worker
+namespace Bot.Data.Services
 {
     public class DiscordUserManager
     {

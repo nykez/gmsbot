@@ -26,11 +26,11 @@ namespace Bot.Data.Processors
             await _context.SaveChangesAsync();
         }
 
-        public async Task<BotUser?> GetUserById(string discordId)
+        public async Task<BotUser?> GetUserById(ulong discordId)
         {
-            return await _context.BotUsers
+            return (await _context.BotUsers
                 .Include(u => u.Roles).ThenInclude(u => u.Role)
-                .FirstOrDefaultAsync(u => u.DiscordId == discordId);
+                .FirstOrDefaultAsync(u => u.DiscordId == discordId))!;
         }
     }
 }

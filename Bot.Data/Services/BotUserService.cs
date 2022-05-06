@@ -1,5 +1,6 @@
 ﻿using Bot.Data.Models.ContextModels;
 using Bot.Data.Processors;
+using Bot.Data.Repos;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -14,15 +15,22 @@ namespace Bot.Data.Services
         private readonly ILogger<BotUserService> _logger;
         private readonly BotUserProcessor _userProcessor;
         private readonly SyncRequestProcessor _syncProcessor;
+        private readonly GmodstoreService _gmodstoreService;
+        private readonly RolesRepo _rolesRepo;
+        private readonly DiscordUserManager _discordUserManager;
 
-        public BotUserService(ILogger<BotUserService> logger, BotUserProcessor userProcessor, SyncRequestProcessor syncProcessor)
+        public BotUserService(ILogger<BotUserService> logger, BotUserProcessor userProcessor, SyncRequestProcessor syncProcessor,
+            GmodstoreService gmodstoreService, RolesRepo rolesRepo, DiscordUserManager discordUserManager)
         {
             _logger = logger;
             _userProcessor = userProcessor;
             _syncProcessor = syncProcessor;
+            _gmodstoreService = gmodstoreService;
+            _rolesRepo = rolesRepo;
+            _discordUserManager = discordUserManager;
         }
 
-        public async Task<BotUser> GetAsync(string id)
+        public async Task<BotUser> GetAsync(ulong id)
         {
             var user = await _userProcessor.GetUserById(id);
             return user!;
@@ -64,8 +72,20 @@ namespace Bot.Data.Services
         private async Task UpdateUserRoles(BotUser user)
         {
             // fetch what addons the user has
+            var currentRoles = await _rolesRepo.GetAllRoles();
+            var addons = (await _gmodstoreService.GetProductPurchasesAsync(user.SteamId)).Data;
+            List<ulong> rolesToAdd = new();
 
-            // apply roles based on what addons the user has
+            foreach(var role in currentRoles)
+            {
+                var t = addons.Any(u => u!.ProductId == role.ScriptId);
+                if (t)
+                {
+                    rolesToAdd.Add(role.DiscordRoleId!.Value);
+                }
+            }
+
+            await _discordUserManager.UpdateRoles(461702012258746390, user.DiscordId, rolesToAdd);
         }
     }
 }

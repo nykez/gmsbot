@@ -8,6 +8,6 @@ namespace Bot.Data.Models.ContextModels
         [Key]
         public int Id { get; set; }
         public string? ScriptId { get; set; }
-        public string? DiscordRoleId { get; set; }
+        public ulong? DiscordRoleId { get; set; }
     }
 }

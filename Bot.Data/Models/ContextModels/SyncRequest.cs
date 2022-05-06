@@ -8,5 +8,5 @@ public class SyncRequest
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public Guid Id { get; set; }
-    public string? DiscordId { get; set; }
+    public ulong DiscordId { get; set; }
 }

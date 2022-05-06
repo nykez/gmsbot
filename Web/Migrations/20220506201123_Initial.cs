@@ -10,6 +10,18 @@ namespace Web.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "AppConfig",
+                columns: table => new
+                {
+                    Key = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Value = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AppConfig", x => x.Key);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
                 {
@@ -53,7 +65,8 @@ namespace Web.Migrations
                 name: "BotUsers",
                 columns: table => new
                 {
-                    DiscordId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    DiscordId = table.Column<decimal>(type: "decimal(20,0)", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     SteamId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedByUser = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -72,7 +85,7 @@ namespace Web.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ScriptId = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DiscordRoleId = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    DiscordRoleId = table.Column<decimal>(type: "decimal(20,0)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -84,7 +97,7 @@ namespace Web.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    DiscordId = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    DiscordId = table.Column<decimal>(type: "decimal(20,0)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -203,7 +216,7 @@ namespace Web.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserDiscordId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    UserDiscordId = table.Column<decimal>(type: "decimal(20,0)", nullable: true),
                     RoleId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -222,9 +235,15 @@ namespace Web.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "SyncRequests",
-                columns: new[] { "Id", "DiscordId" },
-                values: new object[] { new Guid("87952c0d-f123-414a-a244-d3df9723b6cf"), null });
+                table: "AppConfig",
+                columns: new[] { "Key", "Value" },
+                values: new object[,]
+                {
+                    { "app_url", "www.google.com" },
+                    { "bot_token", "" },
+                    { "gms_token", "" },
+                    { "steamapikey", "" }
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -278,6 +297,9 @@ namespace Web.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "AppConfig");
+
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 

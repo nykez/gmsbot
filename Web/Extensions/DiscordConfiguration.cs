@@ -1,8 +1,14 @@
-﻿using Bot.Worker.Handlers;
+﻿using Bot.Data.Context;
+using Bot.Data.Processors;
+using Bot.Data.Services;
+using Bot.Worker.Handlers;
 using Discord;
 using Discord.Addons.Hosting;
 using Discord.Commands;
 using Discord.WebSocket;
+
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace Web.Extensions
 {
@@ -32,7 +38,6 @@ namespace Web.Extensions
                 config.LogLevel = LogSeverity.Info;
                 config.UseCompiledLambda = false;
             });
-
             services.AddHostedService<CommandHandler>();
             services.AddHostedService<InteractionHandler>();
         }

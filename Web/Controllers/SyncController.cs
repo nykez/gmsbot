@@ -22,16 +22,14 @@ namespace Web.Controllers
         private readonly SyncRequestProcessor _processor;
         private readonly SignInManager<AppUser> _signInManager;
         private readonly BotUserService _userService;
-        private readonly GmodstoreService _productsPurchase;
 
         public SyncController(ILogger<SyncController> logger, SyncRequestProcessor processor, SignInManager<AppUser> signInManager,
-            BotUserService userService, GmodstoreService productsPurchase)
+            BotUserService userService)
         {
             _logger = logger;
             _processor = processor;
             _signInManager = signInManager;
             _userService = userService;
-            _productsPurchase = productsPurchase;
         }
 
         public async Task<IActionResult> Index()
@@ -39,11 +37,6 @@ namespace Web.Controllers
             return Ok("[]");
         }
         
-        [HttpGet("sync/user/{id}")]
-        public async Task<BotUser> Get(string id)
-        {
-            return await _userService.GetAsync(id);
-        }
 
         [HttpGet("sync/{id}")]
         public async Task<IActionResult> Sync(Guid id)

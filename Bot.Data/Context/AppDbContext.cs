@@ -17,7 +17,7 @@ namespace Bot.Data.Context
             { Key = AppConfigConstants.SteamApiKey, Value = "" }, new AppConfig()
             { Key = AppConfigConstants.BotToken, Value = "" }, new AppConfig()
             { Key = AppConfigConstants.GmsToken, Value = "" }, new AppConfig()
-            { Key = AppConfigConstants.AppUrl, Value = "" });
+            { Key = AppConfigConstants.AppUrl, Value = "www.google.com" });
 
             base.OnModelCreating(builder);
         }

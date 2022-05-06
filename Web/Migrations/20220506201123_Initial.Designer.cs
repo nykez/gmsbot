@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Web.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220503160742_ConfigOptionsSeed")]
-    partial class ConfigOptionsSeed
+    [Migration("20220506201123_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -51,6 +51,11 @@ namespace Web.Migrations
                         {
                             Key = "gms_token",
                             Value = ""
+                        },
+                        new
+                        {
+                            Key = "app_url",
+                            Value = "www.google.com"
                         });
                 });
 
@@ -124,8 +129,11 @@ namespace Web.Migrations
 
             modelBuilder.Entity("Bot.Data.Models.ContextModels.BotUser", b =>
                 {
-                    b.Property<string>("DiscordId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<decimal>("DiscordId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("decimal(20,0)");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<decimal>("DiscordId"), 1L, 1);
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -155,8 +163,8 @@ namespace Web.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("DiscordRoleId")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<decimal?>("DiscordRoleId")
+                        .HasColumnType("decimal(20,0)");
 
                     b.Property<string>("ScriptId")
                         .HasColumnType("nvarchar(max)");
@@ -177,8 +185,8 @@ namespace Web.Migrations
                     b.Property<int?>("RoleId")
                         .HasColumnType("int");
 
-                    b.Property<string>("UserDiscordId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<decimal?>("UserDiscordId")
+                        .HasColumnType("decimal(20,0)");
 
                     b.HasKey("Id");
 
@@ -195,8 +203,8 @@ namespace Web.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("DiscordId")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<decimal>("DiscordId")
+                        .HasColumnType("decimal(20,0)");
 
                     b.HasKey("Id");
 
