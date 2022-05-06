@@ -16,16 +16,7 @@ Best to run on a single container with reverse nginx proxy
 
 # Self Host Instructions
 
-1. Create ``Bot/token.json`` in Bot project dir with
-
-```json
-{
-  "token": "your bot token here"
-}
-
-```
-2. Switch to Web project dir and create `SteamApiKey` configuration item
-
-  ex: ```dotnet user-secrets set "SteamApiKey" "steamapikey"``` or any other configuration methods.
-  
-add more stuff here wip
+1. Do hosting stuff
+2. Go to yourwebsite.com/config
+3. Enter configuration values
+4. Restart bot
