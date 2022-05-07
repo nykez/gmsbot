@@ -5,8 +5,10 @@ namespace Bot.Data.Models.ContextModels
     public class BotUser: IAuditEntity
     {
         [Key]
+        public int Id { get; set; }
         public ulong DiscordId { get; set; }
         public string? SteamId { get; set; }
+        public string? GmodstoreId { get; set; }
         public string? CreatedByUser { get; set; }
         public DateTime CreatedAt { get; set; }
         public string? UpdatedByUser { get; set; }

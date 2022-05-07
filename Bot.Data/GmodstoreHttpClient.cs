@@ -8,6 +8,7 @@ using System.Net.Http.Json;
 using Microsoft.Extensions.Logging;
 using Bot.Data.Services;
 using Bot.Data;
+using Everyday.GmodStore.Sdk.Model;
 
 namespace Bot.Http
 {
@@ -47,6 +48,7 @@ namespace Bot.Http
         {
             try
             {
+
                 HttpResponseMessage response = await _client.GetAsync(_client.BaseAddress + route);
                 response.EnsureSuccessStatusCode();
                 var content = await response.Content.ReadAsStringAsync();

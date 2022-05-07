@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Web.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220506201123_Initial")]
-    partial class Initial
+    [Migration("20220507183055_GmodstoreId")]
+    partial class GmodstoreId
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -129,16 +129,22 @@ namespace Web.Migrations
 
             modelBuilder.Entity("Bot.Data.Models.ContextModels.BotUser", b =>
                 {
-                    b.Property<decimal>("DiscordId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("decimal(20,0)");
+                        .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<decimal>("DiscordId"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreatedByUser")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("DiscordId")
+                        .HasColumnType("decimal(20,0)");
+
+                    b.Property<string>("GmodstoreId")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SteamId")
@@ -150,7 +156,7 @@ namespace Web.Migrations
                     b.Property<string>("UpdatedByUser")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("DiscordId");
+                    b.HasKey("Id");
 
                     b.ToTable("BotUsers");
                 });
@@ -185,14 +191,14 @@ namespace Web.Migrations
                     b.Property<int?>("RoleId")
                         .HasColumnType("int");
 
-                    b.Property<decimal?>("UserDiscordId")
-                        .HasColumnType("decimal(20,0)");
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("RoleId");
 
-                    b.HasIndex("UserDiscordId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("ScriptUserRoles");
                 });
@@ -356,7 +362,7 @@ namespace Web.Migrations
 
                     b.HasOne("Bot.Data.Models.ContextModels.BotUser", "User")
                         .WithMany("Roles")
-                        .HasForeignKey("UserDiscordId");
+                        .HasForeignKey("UserId");
 
                     b.Navigation("Role");
 

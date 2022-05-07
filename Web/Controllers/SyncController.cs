@@ -64,7 +64,6 @@ namespace Web.Controllers
                 if (info == null)
                     throw new Exception("Invalid login attempt. LoginInfo is null.");
 
-
                 var steamId = info.Principal.GetSteamId();
                 if (steamId == null)
                     throw new Exception("Could not get steamid from login.");
@@ -75,8 +74,8 @@ namespace Web.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError("Error logging in and syncing with steam!", ex);
-                return BadRequest("['Error']");
+                _logger.LogError("Error logging in and syncing with steam!", ex.Message);
+                return BadRequest(ex.Message);
             }
         }
     }

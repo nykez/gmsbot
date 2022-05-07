@@ -65,8 +65,9 @@ namespace Web.Migrations
                 name: "BotUsers",
                 columns: table => new
                 {
-                    DiscordId = table.Column<decimal>(type: "decimal(20,0)", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    DiscordId = table.Column<decimal>(type: "decimal(20,0)", nullable: false),
                     SteamId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedByUser = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -75,7 +76,7 @@ namespace Web.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_BotUsers", x => x.DiscordId);
+                    table.PrimaryKey("PK_BotUsers", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -216,17 +217,17 @@ namespace Web.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserDiscordId = table.Column<decimal>(type: "decimal(20,0)", nullable: true),
+                    UserId = table.Column<int>(type: "int", nullable: true),
                     RoleId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ScriptUserRoles", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ScriptUserRoles_BotUsers_UserDiscordId",
-                        column: x => x.UserDiscordId,
+                        name: "FK_ScriptUserRoles_BotUsers_UserId",
+                        column: x => x.UserId,
                         principalTable: "BotUsers",
-                        principalColumn: "DiscordId");
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_ScriptUserRoles_ScriptRoles_RoleId",
                         column: x => x.RoleId,
@@ -290,9 +291,9 @@ namespace Web.Migrations
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ScriptUserRoles_UserDiscordId",
+                name: "IX_ScriptUserRoles_UserId",
                 table: "ScriptUserRoles",
-                column: "UserDiscordId");
+                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

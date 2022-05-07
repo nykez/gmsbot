@@ -26,7 +26,7 @@ namespace Bot.Worker.Modules
                 var guild = Context.Guild.Name;
                 var syncId = await _provider.GetRequiredService<SyncRequestProcessor>().CreateRequest(user.Id);
                 var appUrl = _provider.GetRequiredService<AppConfigService>().GetConfigItemSingle("app_url");
-                var url = appUrl.Value + "sync/" + syncId.Id;
+                var url = new Uri(appUrl!.Value!.ToString()) + "sync/" + syncId.Id;
                 await RespondAsync($"Syncing {user.DisplayName} roles!");
                 await user.SendMessageAsync($"Hello! Please follow the url to sync your gmodstore roles with {guild}!: {url}");
             }

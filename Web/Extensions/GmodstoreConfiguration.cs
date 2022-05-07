@@ -13,6 +13,7 @@ namespace Web.Extensions
         {
             services.AddScoped<GmodstoreService>();
             services.AddScoped<GmodstoreHttpClient<ProductPurchasesResponse>>();
+            services.AddScoped<GmodstoreHttpClient<UserResponse>>();
         }
     }
 }

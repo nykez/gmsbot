@@ -46,12 +46,20 @@ namespace Bot.Data.Services
 
                 var isValidUser = await _userProcessor.GetUserById(request.DiscordId!);
                 if (isValidUser != null)
+                {
+                    await UpdateUserRoles(isValidUser);
                     return isValidUser;
+                }
+
+                var gmodstoreUser = (await _gmodstoreService.GetUserAsync(steamId)).Data;
+                if (gmodstoreUser == null || gmodstoreUser.First() == null)
+                    throw new InvalidOperationException("Cannot find gmodstore account with given steamid");
 
                 // create user
                 BotUser user = new();
                 user.DiscordId = request.DiscordId;
                 user.SteamId = steamId;
+                user.GmodstoreId = gmodstoreUser.First().Id;
                 user.CreatedAt = DateTime.UtcNow;
                 user.UpdatedAt = DateTime.UtcNow;
                 user.UpdatedByUser = "root";
@@ -73,15 +81,17 @@ namespace Bot.Data.Services
         {
             // fetch what addons the user has
             var currentRoles = await _rolesRepo.GetAllRoles();
-            var addons = (await _gmodstoreService.GetProductPurchasesAsync(user.SteamId)).Data;
+
+            var addons = (await _gmodstoreService.GetProductPurchasesAsync(user.GmodstoreId)).Data;
             List<ulong> rolesToAdd = new();
 
             foreach(var role in currentRoles)
             {
-                var t = addons.Any(u => u!.ProductId == role.ScriptId);
-                if (t)
+                var matches = addons.Where(u => u.Id == role.ScriptId);
+
+                if (matches.Count() > 0 )
                 {
-                    rolesToAdd.Add(role.DiscordRoleId!.Value);
+                    rolesToAdd.Add(role!.DiscordRoleId!.Value);
                 }
             }
 
