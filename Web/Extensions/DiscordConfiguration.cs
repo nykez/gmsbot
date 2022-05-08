@@ -1,4 +1,5 @@
-﻿using Bot.Data.Context;
+﻿using Bot.Data;
+using Bot.Data.Context;
 using Bot.Data.Processors;
 using Bot.Data.Services;
 using Bot.Worker.Handlers;
@@ -14,32 +15,41 @@ namespace Web.Extensions
 {
     public static class DiscordConfiguration
     {
-        public static void AddDiscordBot(this IHostBuilder hostBuilder, IServiceCollection services)
+        public static void AddDiscordBot(this IHostBuilder hostBuilder, IServiceCollection services, string token)
         {
-            hostBuilder.ConfigureDiscordHost(async (context, config) =>
+            try
             {
-                config.SocketConfig = new DiscordSocketConfig
+                hostBuilder.ConfigureDiscordHost(async (context, config) =>
                 {
-                    LogLevel = LogSeverity.Verbose,
-                    AlwaysDownloadUsers = true,
-                    MessageCacheSize = 200
-                };
+                    config.SocketConfig = new DiscordSocketConfig
+                    {
+                        LogLevel = LogSeverity.Verbose,
+                        AlwaysDownloadUsers = true,
+                        MessageCacheSize = 200
+                    };
 
-                config.Token = context.Configuration["Token"];
-            })
-            //Omit this if you don't use the command service
-            .UseCommandService((context, config) =>
+                    config.Token = token ?? context.Configuration["Token"];
+                })
+                //Omit this if you don't use the command service
+                .UseCommandService((context, config) =>
+                {
+                    config.DefaultRunMode = RunMode.Async;
+                    config.CaseSensitiveCommands = false;
+                })
+                .UseInteractionService((context, config) =>
+                {
+                    config.LogLevel = LogSeverity.Info;
+                    config.UseCompiledLambda = false;
+                });
+
+                services.AddHostedService<CommandHandler>();
+                services.AddHostedService<InteractionHandler>();
+            }
+            catch (Exception)
             {
-                config.DefaultRunMode = RunMode.Async;
-                config.CaseSensitiveCommands = false;
-            })
-            .UseInteractionService((context, config) =>
-            {
-                config.LogLevel = LogSeverity.Info;
-                config.UseCompiledLambda = false;
-            });
-            services.AddHostedService<CommandHandler>();
-            services.AddHostedService<InteractionHandler>();
+
+                throw;
+            }
         }
     }
 }

@@ -48,7 +48,6 @@ namespace Bot.Http
         {
             try
             {
-
                 HttpResponseMessage response = await _client.GetAsync(_client.BaseAddress + route);
                 response.EnsureSuccessStatusCode();
                 var content = await response.Content.ReadAsStringAsync();

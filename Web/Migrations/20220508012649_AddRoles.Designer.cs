@@ -4,6 +4,7 @@ using Bot.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Web.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220508012649_AddRoles")]
+    partial class AddRoles
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -123,22 +125,6 @@ namespace Web.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "41232f4e-44ff-47ba-8d43-fe551a9ba52c",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "9b447a08-f8e7-422c-a425-c426270b2c8e",
-                            Email = "admin@admin.com",
-                            EmailConfirmed = false,
-                            LockoutEnabled = false,
-                            PasswordHash = "AQAAAAEAACcQAAAAEJqRXVGVZrXMzphwTOMY7QxBpT0u/z1a+8PWbAsLng4SuE7eaQtjxNuCivVFFMRYpw==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "2a09350b-5b0c-408a-960d-9fde5772ac9e",
-                            TwoFactorEnabled = false,
-                            UserName = "admin"
-                        });
                 });
 
             modelBuilder.Entity("Bot.Data.Models.ContextModels.BotUser", b =>
@@ -260,20 +246,20 @@ namespace Web.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "e36412ef-4640-472a-8941-420e7af89773",
-                            ConcurrencyStamp = "ba6f4f9a-e834-4716-a7b0-ba73efe327a6",
+                            Id = "e26daa30-8087-4ae2-b344-d9f598a78dda",
+                            ConcurrencyStamp = "9752c95b-1292-4732-8fd8-997ec17b5aff",
                             Name = "Admin"
                         },
                         new
                         {
-                            Id = "8fe0ee36-8bf4-444f-85f3-62afcfb7ced1",
-                            ConcurrencyStamp = "710641d8-76c3-499d-8fc4-16a84c897956",
+                            Id = "a7a64fcb-f84e-4ddb-9cae-49893cff5262",
+                            ConcurrencyStamp = "48d08bf9-2013-4b41-84f4-787dcabb9136",
                             Name = "Support Rep"
                         },
                         new
                         {
-                            Id = "25095f24-1036-4aff-b01b-5c0ca64abb48",
-                            ConcurrencyStamp = "9e18be3c-87ee-4f1d-a1d6-25d78a913dc6",
+                            Id = "1cf96fd3-9bd9-48b5-8427-a510cbff4a12",
+                            ConcurrencyStamp = "0c25081d-13ea-472e-829c-876a4844bbea",
                             Name = "Moderator"
                         });
                 });
@@ -365,13 +351,6 @@ namespace Web.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            UserId = "41232f4e-44ff-47ba-8d43-fe551a9ba52c",
-                            RoleId = "e36412ef-4640-472a-8941-420e7af89773"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>

@@ -1,3 +1,4 @@
+using AspNet.Security.OpenId.Steam;
 using Bot.Data;
 using Bot.Data.Context;
 using Bot.Data.Models;
@@ -10,14 +11,30 @@ using Microsoft.Extensions.Options;
 using Web.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// load app config
+AppConfiguration appConfig = new AppConfiguration();
+var dbOptions = new DbContextOptionsBuilder<ApplicationDbContext>();
+dbOptions.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+using (var dbContext = new ApplicationDbContext(dbOptions.Options))
+{
+    dbContext.Database.EnsureCreated();
+    await dbContext.Database.MigrateAsync();
+    if (dbContext.AppConfig != null)
+    {
+        var settings = await dbContext?.AppConfig?.ToListAsync();
+        appConfig.Config = settings;
+    }
+}
+
 // Add services to the container.
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-   options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly("Web")));
+       options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly("Web")));
 builder.Services.AddSingleton<IConfigureOptions<AppConfiguration>, AppConfigOptions>();
 builder.Services.AddAuthentication(options => { })
     .AddSteam(o =>
     {
-        o.ApplicationKey = builder.Configuration["SteamApiKey"];
+        o.ApplicationKey = appConfig.Config.FirstOrDefault(u => u.Key! == AppConfigConstants.SteamApiKey).Value!;
     });
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddDefaultIdentity<AppUser>()
@@ -32,8 +49,7 @@ builder.Services.AddScoped<RolesRepo>();
 builder.Services.AddScoped<UserRolesRepo>();
 builder.Services.AddScoped<DiscordUserManager>();
 builder.Services.AddGmodstoreServices();
-builder.Host.AddDiscordBot(builder.Services);
-
+builder.Host.AddDiscordBot(builder.Services, appConfig.Config.FirstOrDefault(u => u.Key == AppConfigConstants.BotToken).Value!);
 
 var app = builder.Build();
 

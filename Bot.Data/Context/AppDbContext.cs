@@ -1,4 +1,5 @@
 ﻿using Bot.Data.Models.ContextModels;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,6 +19,35 @@ namespace Bot.Data.Context
             { Key = AppConfigConstants.BotToken, Value = "" }, new AppConfig()
             { Key = AppConfigConstants.GmsToken, Value = "" }, new AppConfig()
             { Key = AppConfigConstants.AppUrl, Value = "www.google.com" });
+
+            var adminRole = new IdentityRole()
+            { Id = Guid.NewGuid().ToString(), Name = "Admin" };
+
+            builder.Entity<IdentityRole>().HasData(adminRole);
+            builder.Entity<IdentityRole>().HasData(new IdentityRole()
+            { Name = "Support Rep" });
+            builder.Entity<IdentityRole>().HasData(new IdentityRole()
+            { Name = "Moderator" });
+
+            var appUser = new AppUser
+            {
+                UserName = "admin",
+                Email = "admin@admin.com",
+                LockoutEnabled = false,
+                Id = Guid.NewGuid().ToString(),
+            };
+            var passwordHasher = new PasswordHasher<AppUser>();
+            appUser.PasswordHash = passwordHasher.HashPassword(appUser, "Admin*123");
+
+            builder.Entity<AppUser>().HasData(appUser);
+
+            var adminRoleSet = new IdentityUserRole<string>
+            {
+                RoleId = adminRole.Id,
+                UserId = appUser.Id
+            };
+
+            builder.Entity<IdentityUserRole<string>>().HasData(adminRoleSet);
 
             base.OnModelCreating(builder);
         }

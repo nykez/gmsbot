@@ -4,6 +4,7 @@ using Bot.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Web.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220508014820_AddAdminUser2")]
+    partial class AddAdminUser2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -127,17 +129,16 @@ namespace Web.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "41232f4e-44ff-47ba-8d43-fe551a9ba52c",
+                            Id = "e0e78495-d189-4112-9662-090b9b8444a6",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "9b447a08-f8e7-422c-a425-c426270b2c8e",
+                            ConcurrencyStamp = "c90b9577-d683-4769-b95d-7a3291d0a4be",
                             Email = "admin@admin.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
-                            PasswordHash = "AQAAAAEAACcQAAAAEJqRXVGVZrXMzphwTOMY7QxBpT0u/z1a+8PWbAsLng4SuE7eaQtjxNuCivVFFMRYpw==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "2a09350b-5b0c-408a-960d-9fde5772ac9e",
+                            SecurityStamp = "12ffc7de-46ff-4029-be29-074a114d6bed",
                             TwoFactorEnabled = false,
-                            UserName = "admin"
+                            UserName = "admin@admin.com"
                         });
                 });
 
@@ -260,20 +261,20 @@ namespace Web.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "e36412ef-4640-472a-8941-420e7af89773",
-                            ConcurrencyStamp = "ba6f4f9a-e834-4716-a7b0-ba73efe327a6",
+                            Id = "b277e4bf-6c93-4e33-9eb1-0fe4d783fd4f",
+                            ConcurrencyStamp = "af125454-daaf-4508-93b6-e599e68badd2",
                             Name = "Admin"
                         },
                         new
                         {
-                            Id = "8fe0ee36-8bf4-444f-85f3-62afcfb7ced1",
-                            ConcurrencyStamp = "710641d8-76c3-499d-8fc4-16a84c897956",
+                            Id = "59a6c64e-8d94-430d-898f-81958f74a5cd",
+                            ConcurrencyStamp = "0874a44b-1af4-4579-b518-0ecae64ab626",
                             Name = "Support Rep"
                         },
                         new
                         {
-                            Id = "25095f24-1036-4aff-b01b-5c0ca64abb48",
-                            ConcurrencyStamp = "9e18be3c-87ee-4f1d-a1d6-25d78a913dc6",
+                            Id = "73b99a33-3029-4f77-9084-0b474da854bf",
+                            ConcurrencyStamp = "40156cd6-8990-4122-ad06-1d6997b99714",
                             Name = "Moderator"
                         });
                 });
@@ -369,8 +370,8 @@ namespace Web.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "41232f4e-44ff-47ba-8d43-fe551a9ba52c",
-                            RoleId = "e36412ef-4640-472a-8941-420e7af89773"
+                            UserId = "e0e78495-d189-4112-9662-090b9b8444a6",
+                            RoleId = "b277e4bf-6c93-4e33-9eb1-0fe4d783fd4f"
                         });
                 });
 
