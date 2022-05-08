@@ -15,14 +15,13 @@ var builder = WebApplication.CreateBuilder(args);
 // load app config
 AppConfiguration appConfig = new AppConfiguration();
 var dbOptions = new DbContextOptionsBuilder<ApplicationDbContext>();
-dbOptions.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+dbOptions.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly("Web"));
 using (var dbContext = new ApplicationDbContext(dbOptions.Options))
 {
-    dbContext.Database.EnsureCreated();
-    await dbContext.Database.MigrateAsync();
+    dbContext.Database.Migrate();
     if (dbContext.AppConfig != null)
     {
-        var settings = await dbContext?.AppConfig?.ToListAsync();
+        var settings = await dbContext!.AppConfig!.ToListAsync();
         appConfig.Config = settings;
     }
 }
@@ -34,7 +33,7 @@ builder.Services.AddSingleton<IConfigureOptions<AppConfiguration>, AppConfigOpti
 builder.Services.AddAuthentication(options => { })
     .AddSteam(o =>
     {
-        o.ApplicationKey = appConfig.Config.FirstOrDefault(u => u.Key! == AppConfigConstants.SteamApiKey).Value!;
+        o.ApplicationKey = appConfig!.Config!.First(u => u.Key! == AppConfigConstants.SteamApiKey).Value!;
     });
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddDefaultIdentity<AppUser>()
@@ -49,7 +48,7 @@ builder.Services.AddScoped<RolesRepo>();
 builder.Services.AddScoped<UserRolesRepo>();
 builder.Services.AddScoped<DiscordUserManager>();
 builder.Services.AddGmodstoreServices();
-builder.Host.AddDiscordBot(builder.Services, appConfig.Config.FirstOrDefault(u => u.Key == AppConfigConstants.BotToken).Value!);
+builder.Host.AddDiscordBot(builder.Services, appConfig!.Config!.First(u => u.Key == AppConfigConstants.BotToken).Value!);
 
 var app = builder.Build();
 

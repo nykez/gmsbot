@@ -28,7 +28,7 @@ namespace Web.Extensions
                         MessageCacheSize = 200
                     };
 
-                    config.Token = token ?? context.Configuration["Token"];
+                    config.Token = !string.IsNullOrEmpty(token) ? token : context.Configuration["Token"];
                 })
                 //Omit this if you don't use the command service
                 .UseCommandService((context, config) =>
