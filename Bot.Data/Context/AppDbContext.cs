@@ -2,12 +2,16 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace Bot.Data.Context
 {
     public class ApplicationDbContext : IdentityDbContext<AppUser>
     {
-        public ApplicationDbContext(DbContextOptions options) : base(options) { }
+        public ApplicationDbContext(DbContextOptions options) : base(options)
+        {
+
+        }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -29,15 +33,23 @@ namespace Bot.Data.Context
             builder.Entity<IdentityRole>().HasData(new IdentityRole()
             { Name = "Moderator" });
 
+
             var appUser = new AppUser
             {
-                UserName = "admin",
+                UserName = "admin@admin.com",
+                NormalizedUserName = "admin@admin.com",
                 Email = "admin@admin.com",
+                NormalizedEmail =  "ADMIN@ADMIN.COM",
                 LockoutEnabled = false,
+                PhoneNumber = "+111111111111",
+                EmailConfirmed = true,
+                PhoneNumberConfirmed = true,
                 Id = Guid.NewGuid().ToString(),
+                SecurityStamp = Guid.NewGuid().ToString("D"),
             };
             var passwordHasher = new PasswordHasher<AppUser>();
-            appUser.PasswordHash = passwordHasher.HashPassword(appUser, "Admin*123");
+            var password =  passwordHasher.HashPassword(appUser, "Admin*123");
+            appUser.PasswordHash = password;
 
             builder.Entity<AppUser>().HasData(appUser);
 
@@ -48,6 +60,12 @@ namespace Bot.Data.Context
             };
 
             builder.Entity<IdentityUserRole<string>>().HasData(adminRoleSet);
+
+            var userStore = new UserStore<AppUser>(this);
+
+            builder.Entity<IdentityUserClaim<string>>().HasData(new IdentityUserClaim<string>
+            { Id = 1, UserId = appUser.Id, ClaimType = ClaimTypes.Role, ClaimValue = "Admin"});
+
 
             base.OnModelCreating(builder);
         }

@@ -24,9 +24,5 @@
     <ProjectReference Include="..\Bot.Worker\Bot.Worker.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Migrations\" />
-  </ItemGroup>
-
 
 </Project>

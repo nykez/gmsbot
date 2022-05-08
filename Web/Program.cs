@@ -6,6 +6,7 @@ using Bot.Data.Models.ContextModels;
 using Bot.Data.Processors;
 using Bot.Data.Repos;
 using Bot.Data.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Web.Extensions;
@@ -18,7 +19,11 @@ var dbOptions = new DbContextOptionsBuilder<ApplicationDbContext>();
 dbOptions.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly("Web"));
 using (var dbContext = new ApplicationDbContext(dbOptions.Options))
 {
-    dbContext.Database.Migrate();
+    var didCreate = dbContext.Database.EnsureCreated();
+    if (didCreate)
+    {
+        dbContext.Database.Migrate();
+    }
     if (dbContext.AppConfig != null)
     {
         var settings = await dbContext!.AppConfig!.ToListAsync();
@@ -37,6 +42,7 @@ builder.Services.AddAuthentication(options => { })
     });
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddDefaultIdentity<AppUser>()
+    .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddHttpClient();
 builder.Services.AddControllersWithViews();

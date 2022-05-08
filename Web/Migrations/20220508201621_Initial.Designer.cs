@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Web.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220507183055_GmodstoreId")]
-    partial class GmodstoreId
+    [Migration("20220508201621_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -125,6 +125,25 @@ namespace Web.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "4e12e854-7cb5-4dcc-b9b8-994edddcc8a3",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "2dc2e9d8-d05f-45f9-bc86-7d6927dc0d19",
+                            Email = "admin@admin.com",
+                            EmailConfirmed = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "ADMIN@ADMIN.COM",
+                            NormalizedUserName = "admin@admin.com",
+                            PasswordHash = "AQAAAAEAACcQAAAAEOOrzKc1OORCC3+GZzsUuKnototm24ex4LbkyWToQp0lM3lM3JPhC5EVQk8G6BeL2g==",
+                            PhoneNumber = "+111111111111",
+                            PhoneNumberConfirmed = true,
+                            SecurityStamp = "13a79d94-400c-41d3-9bd8-ca3d57731948",
+                            TwoFactorEnabled = false,
+                            UserName = "admin@admin.com"
+                        });
                 });
 
             modelBuilder.Entity("Bot.Data.Models.ContextModels.BotUser", b =>
@@ -242,6 +261,26 @@ namespace Web.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "ee7bd815-c1e5-4a20-b0d0-7f2002f29cf2",
+                            ConcurrencyStamp = "6bf3f573-49dc-4404-a95c-54425a398ee9",
+                            Name = "Admin"
+                        },
+                        new
+                        {
+                            Id = "2968aaa2-1c81-4e9e-82ca-9d4d906ce147",
+                            ConcurrencyStamp = "fd21ad0b-0ec2-4979-8c21-9907ef762061",
+                            Name = "Support Rep"
+                        },
+                        new
+                        {
+                            Id = "5e359000-920f-48bb-85c2-b7f700426ccc",
+                            ConcurrencyStamp = "3a8d9a86-e227-46da-a731-6819a1bb23cd",
+                            Name = "Moderator"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -292,6 +331,15 @@ namespace Web.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("AspNetUserClaims", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            ClaimType = "http://schemas.microsoft.com/ws/2008/06/identity/claims/role",
+                            ClaimValue = "Admin",
+                            UserId = "4e12e854-7cb5-4dcc-b9b8-994edddcc8a3"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
@@ -331,6 +379,13 @@ namespace Web.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = "4e12e854-7cb5-4dcc-b9b8-994edddcc8a3",
+                            RoleId = "ee7bd815-c1e5-4a20-b0d0-7f2002f29cf2"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>

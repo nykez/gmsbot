@@ -69,6 +69,7 @@ namespace Web.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     DiscordId = table.Column<decimal>(type: "decimal(20,0)", nullable: false),
                     SteamId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    GmodstoreId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedByUser = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedByUser = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -245,6 +246,31 @@ namespace Web.Migrations
                     { "gms_token", "" },
                     { "steamapikey", "" }
                 });
+
+            migrationBuilder.InsertData(
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+                values: new object[,]
+                {
+                    { "2968aaa2-1c81-4e9e-82ca-9d4d906ce147", "fd21ad0b-0ec2-4979-8c21-9907ef762061", "Support Rep", null },
+                    { "5e359000-920f-48bb-85c2-b7f700426ccc", "3a8d9a86-e227-46da-a731-6819a1bb23cd", "Moderator", null },
+                    { "ee7bd815-c1e5-4a20-b0d0-7f2002f29cf2", "6bf3f573-49dc-4404-a95c-54425a398ee9", "Admin", null }
+                });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUsers",
+                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "SteamId", "TwoFactorEnabled", "UserName" },
+                values: new object[] { "4e12e854-7cb5-4dcc-b9b8-994edddcc8a3", 0, "2dc2e9d8-d05f-45f9-bc86-7d6927dc0d19", "admin@admin.com", true, false, null, "ADMIN@ADMIN.COM", "admin@admin.com", "AQAAAAEAACcQAAAAEOOrzKc1OORCC3+GZzsUuKnototm24ex4LbkyWToQp0lM3lM3JPhC5EVQk8G6BeL2g==", "+111111111111", true, "13a79d94-400c-41d3-9bd8-ca3d57731948", null, false, "admin@admin.com" });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUserClaims",
+                columns: new[] { "Id", "ClaimType", "ClaimValue", "UserId" },
+                values: new object[] { 1, "http://schemas.microsoft.com/ws/2008/06/identity/claims/role", "Admin", "4e12e854-7cb5-4dcc-b9b8-994edddcc8a3" });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUserRoles",
+                columns: new[] { "RoleId", "UserId" },
+                values: new object[] { "ee7bd815-c1e5-4a20-b0d0-7f2002f29cf2", "4e12e854-7cb5-4dcc-b9b8-994edddcc8a3" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
