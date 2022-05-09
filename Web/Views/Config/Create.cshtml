@@ -1,0 +1,28 @@
+﻿@using Bot.Data.Models.ContextModels
+@model ScriptRole
+
+@{
+    ViewBag.Title = "App Config";
+}
+
+
+<h2 class="mb-5">Create Role</h2>
+
+<div class="card">
+    <div class="card-body">
+        <form method="post">
+            @Html.AntiForgeryToken()
+            <div class="mb-1">
+                <label class="form-label">Script Id</label>
+                <input type="text" class="form-control" asp-for="@Model.ScriptId">
+            </div>
+            <div class="mb-1">
+                <label class="form-label">Discord Role Id</label>
+                <input asp-for="@Model.DiscordRoleId" type="text" class="form-control">
+            </div>
+
+            <button type="submit" class="btn btn-primary">Submit</button>
+            <a asp-controller="Config" asp-action="Index" class="btn btn-danger">Go Back</a>
+        </form>
+    </div>
+</div>

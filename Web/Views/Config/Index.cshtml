@@ -1,2 +1,50 @@
-﻿<h2>Configuration</h2>
+﻿@using Bot.Data.Models
+@using Web.Models
+@model ConfigViewModel
 
+@{
+    ViewBag.Title = "App Config";
+}
+
+<h2 class="mb-5">App Configuration</h2>
+
+<div class="card mb-2">
+    <div class="card-header">
+        App Settings
+    </div>
+    <div class="card-body">
+        <form>
+            @foreach(var config in Model.Config!.Config!)
+            {
+                <div class="mb-1">
+                    <label class="form-label">@config.Key</label>
+                    <input asp-for="@config.Value" type="text" class="form-control" value="@config.Value">
+                </div>
+            }
+            <div class="form-text mt-1 mb-1">These values are NOT encrypted.</div>
+            <button type="submit" class="btn btn-primary">Save</button>
+        </form>
+    </div>
+</div>
+
+
+<div class="card mb-2">
+    <div class="card-header">
+        Script Roles
+    </div>
+    <div class="card-body">
+        <form method="post">
+            @Html.AntiForgeryToken()
+            @foreach(var addonRole in @Model?.Roles)
+            {
+                <div class="row mb-1">
+                    <input type="text" value="@addonRole.ScriptId" class="form-control col-6" />
+                    <input type="text" value="@addonRole.DiscordRoleId" class="form-control col-6" />
+                </div>
+            }
+            <button type="submit" class="btn btn-primary">Save</button>
+            <a asp-controller="Config" asp-action="Create" class="btn btn-secondary">Create New</a>
+
+        </form>
+    </div>
+</div>
