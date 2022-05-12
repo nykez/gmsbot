@@ -23,4 +23,4 @@ Best to run on a single container with reverse nginx proxy
 2. Go to yourwebsite.com/config
 3. Login with: user: admin, password: Admin*123
 4. Enter configuration values
-5. Restart bot
+5. Click ``Restart bot``
